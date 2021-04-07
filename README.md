@@ -1,2 +1,2 @@
 # ShuTBlog
-A java project for my own blog, and also for testing my knowledge acquisition.
+A front-end and back-end separated web application for my own blog, and also for testing my knowledge acquisition.
