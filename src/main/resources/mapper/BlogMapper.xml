@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="self.projects.shutblog.mapper.BlogMapper">
+    <resultMap id="BlogMap" type="self.projects.shutblog.entity.BlogEntity">
+        <id column="blog_id" property="blogId"/>
+        <result column="title" property="title"/>
+        <result column="brief_introduction" property="briefIntroduction"/>
+        <result column="content" property="content"/>
+        <result column="publicity" property="publicity"/>
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="recent_modify_time" property="recentModifyTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="self.projects.shutblog.entity.BlogEntity" useGeneratedKeys="true" keyProperty="blogId">
+        insert into TBlog(title, brief_introduction, content, publicity)
+        values (#{blogEntity.title}, #{blogEntity.briefIntroduction}, #{blogEntity.content}, #{blogEntity.publicity})
+    </insert>
+    <insert id="bindingAuthor">
+        insert into TEdit(blog_id, user_id)
+        values (#{blogId}, #{userId})
+    </insert>
+    <delete id="deleteBlogById">
+        delete from TBlog where blog_id=#{blogId}
+    </delete>
+    <update id="updateWholeObject" parameterType="self.projects.shutblog.entity.BlogEntity">
+        update TBlog
+        <trim prefix="set" suffixOverrides=",">
+            <if test="blogEntity.title != null">title=#{blogEntity.title},</if>
+            <if test="blogEntity.briefIntroduction != null">brief_introduction=#{blogEntity.briefIntroduction},</if>
+            <if test="blogEntity.content != null">content=#{blogEntity.content},</if>
+            <if test="blogEntity.publicity != '\0'">publicity=#{blogEntity.publicity},</if>
+        </trim>
+        where blog_id=#{blogEntity.blogId}
+    </update>
+    <select id="getAllBlogs" resultType="self.projects.shutblog.entity.BlogEntity">
+        select * from v_blog_with_author where publicity='0'
+    </select>
+    <select id="getOnesAllBlogs" resultType="self.projects.shutblog.entity.BlogEntity">
+        select * from v_blog_with_author where user_id=#{userId}
+    </select>
+</mapper>
