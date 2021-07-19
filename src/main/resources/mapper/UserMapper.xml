@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="self.projects.shutblog.mapper.UserMapper">
+    <resultMap id="UserMap" type="self.projects.shutblog.entity.UserEntity">
+        <id column="user_id" property="userId"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="real_name" property="realName"/>
+        <result column="sex" property="sex"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+    </resultMap>
+
+    <insert id="save" parameterType="self.projects.shutblog.entity.UserEntity">
+        insert into TUser(email, password, nickname)
+            values (#{userEntity.email}, #{userEntity.password}, #{userEntity.email})
+    </insert>
+    <update id="updateWholeObject" parameterType="self.projects.shutblog.entity.UserEntity">
+        update TUser
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userEntity.nickname != null">nickname=#{userEntity.nickname},</if>
+            <if test="userEntity.realName != null">real_name=#{userEntity.realName},</if>
+            <if test="userEntity.sex != '\0'">sex=#{userEntity.sex},</if>
+            <if test="userEntity.phone != null">phone=#{userEntity.phone},</if>
+            <if test="userEntity.address != null">address=#{userEntity.address},</if>
+        </trim>
+        where user_id=#{userEntity.userId}
+    </update>
+    <update id="changePwd">
+        update TUser set password=#{newPwd} where user_id=#{userId}
+    </update>
+    <update id="updateNickname">
+        update TUser set nickname=#{newNickname} where user_id=#{userId}
+    </update>
+    <update id="updateRealName">
+        update TUser set real_name=#{newRealName} where user_id=#{userId}
+    </update>
+    <update id="updateSex">
+        update TUser set sex=#{newSex} where user_id=#{userId}
+    </update>
+    <update id="updatePhone">
+        update TUser set phone=#{newPhone} where user_id=#{userId}
+    </update>
+    <update id="updateAddress">
+        update TUser set address=#{newAddress} where user_id=#{userId}
+    </update>
+    <select id="quaryById" resultType="self.projects.shutblog.entity.UserEntity">
+        select * from TUser where user_id=#{userId}
+    </select>
+    <select id="quaryPwdByEmail" resultType="string">
+        select password from TUser where email=#{email}
+    </select>
+    <select id="quaryIdByEmail" resultType="int">
+        select user_id from TUser where email=#{email}
+    </select>
+</mapper>
